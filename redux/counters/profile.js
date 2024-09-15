@@ -1,10 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchProfile, fetchContact } from "../actions/profile";
 
+const getSavedProfile = () => {
+  if (typeof window !== "undefined") {
+    const savedProfile = localStorage.getItem("profileDetails");
+    return savedProfile ? JSON.parse(savedProfile) : {};
+  }
+  return {};
+};
+
 const Slice = createSlice({
   name: "profile",
   initialState: {
-    details: {},
+    details: getSavedProfile(),
     contact: [],
     message: null,
     status: "idle",
@@ -23,6 +31,11 @@ const Slice = createSlice({
         state.status = "succeeded";
         state.details = action.payload.data;
         state.message = action.payload.message;
+
+        localStorage.setItem(
+          "profileDetails",
+          JSON.stringify(action.payload.data)
+        );
       })
       .addCase(fetchProfile.rejected, (state, action) => {
         state.status = "failed";
