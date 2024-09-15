@@ -1,4 +1,8 @@
+import { useSelector } from "react-redux";
+
 const Footer = ({ bg, extraClass }) => {
+  const { details } = useSelector((state) => state.profile);
+
   return (
     <footer
       className={`main-footer ${bg ? bg : "black"}-bg ${
@@ -44,31 +48,19 @@ const Footer = ({ bg, extraClass }) => {
         {/*=== Footer Widget ===*/}
         <div className="footer-widget-area pt-75 pb-30">
           <div className="row">
-            <div className="col-lg-3 col-md-6">
+            <div className="col-lg-5 col-md-6">
               {/*=== Footer Widget ===*/}
               <div className="footer-widget about-company-widget mb-40">
                 <h4 className="widget-title">Tentang</h4>
                 <div className="footer-content">
-                  <p>
-                    Kampung Tematik Mulyaharja merupakan tempat wisata di Kota
-                    Bogor yang memiliki julukan surga yang tersisa di tengah
-                    kota.
-                  </p>
+                  <p>{details.description}</p>
                   <a href="#" className="footer-logo">
-                    <img
-                      src={
-                        bg === "gray"
-                          ? "assets/images/logo/logo.png"
-                          : "assets/images/logo/logo.png"
-                      }
-                      height={60}
-                      alt="Site Logo"
-                    />
+                    <img src={details.logo} height={60} alt="Site Logo" />
                   </a>
                 </div>
               </div>
             </div>
-            <div className="col-lg-5 col-md-6">
+            <div className="col-lg-3 col-md-6">
               {/*=== Footer Widget ===*/}
               <div className="footer-widget service-nav-widget mb-40 pl-lg-70">
                 <h4 className="widget-title">Halaman</h4>
@@ -90,20 +82,6 @@ const Footer = ({ bg, extraClass }) => {
                       <a href="#">Video</a>
                     </li>
                   </ul>
-                  {/* <ul className="footer-widget-nav">
-                    <li>
-                      <a href="#">Need a Career ?</a>
-                    </li>
-                    <li>
-                      <a href="#">Latest News &amp; Blog</a>
-                    </li>
-                    <li>
-                      <a href="#">Core Features</a>
-                    </li>
-                    <li>
-                      <a href="#">Meet Our teams</a>
-                    </li>
-                  </ul> */}
                 </div>
               </div>
             </div>
@@ -143,8 +121,8 @@ const Footer = ({ bg, extraClass }) => {
               <div className="footer-text">
                 <p>
                   Copy@ 2024{" "}
-                  <span style={{ color: "#F7921E" }}>Kampung Mulaharja</span>,
-                  All Right Reserved
+                  <span style={{ color: "#F7921E" }}>{details.name}</span>, All
+                  Right Reserved
                 </p>
               </div>
             </div>

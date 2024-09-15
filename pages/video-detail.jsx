@@ -6,8 +6,27 @@ import Link from "next/link";
 import { Nav, Tab } from "react-bootstrap";
 import Slider from "react-slick";
 import PageBanner from "@/src/components/PageBanner";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { fetchDetailVideos, fetchVideos } from "@/redux/actions/videos";
 
-const TourDetails = () => {
+const VideoDetail = () => {
+  const dispatch = useDispatch();
+
+  const { query } = useRouter();
+  const { id } = query;
+
+  const videos = useSelector((state) => state.videos);
+
+  useEffect(() => {
+    dispatch(fetchVideos({}));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (id) dispatch(fetchDetailVideos(id));
+  }, [dispatch, id]);
+
   return (
     <Layout header={2} extraClass={"pt-160"}>
       <PageBanner pageTitle={"Video Detail"} />
@@ -20,7 +39,7 @@ const TourDetails = () => {
           <iframe
             width="560"
             height="600"
-            src={`https://www.youtube.com/embed/gZb398QbrpM?si=lm9HkPC7d5B5IRbq`}
+            src={`https://www.youtube.com/embed/${videos.details?.youtube_id}?si=lm9HkPC7d5B5IRbq`}
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -32,10 +51,10 @@ const TourDetails = () => {
               <div className="row">
                 <div className="col-xl-6">
                   <div className="tour-title mb-20">
-                    <h3 className="title">Mengenal Panen di Mulaharja</h3>
+                    <h3 className="title">{videos.details?.title}</h3>
                     <p>
                       <i className="far fa-map-marker-alt" />
-                      Kampung Mulaharja
+                      {videos.details?.location}
                     </p>
                   </div>
                 </div>
@@ -44,263 +63,12 @@ const TourDetails = () => {
 
             <div className="row">
               <div className="col-xl-8">
-                {/*=== Place Content Wrap ===*/}
-                <div className="place-content-wrap pt-45 wow fadeInUp">
-                  <h3 className="title">Masa Panen</h3>
-                  <p>
-                    Mula harja kampung tematik Mula harja kampung tematik Mula
-                    harja kampung tematik Mula harja kampung tematikMula harja
-                    kampung tematik Mula harja kampung tematik Mula harja
-                    kampung tematik Mula harja kampung tematikMula harja kampung
-                    tematik Mula harja kampung tematik Mula harja kampung
-                    tematik Mula harja kampung tematikMula harja kampung tematik
-                    Mula harja kampung tematik Mula harja kampung tematik Mula
-                    harja kampung tematikMula harja kampung tematik Mula harja
-                    kampung tematik Mula harja kampung tematik Mula harja
-                    kampung tematikMula harja kampung tematik Mula harja kampung
-                    tematik Mula harja kampung tematik Mula harja kampung
-                    tematikMula harja kampung tematik Mula harja kampung tematik
-                    Mula harja kampung tematik Mula harja kampung tematikMula
-                    harja kampung tematik Mula harja kampung tematik Mula harja
-                    kampung tematik Mula harja kampung tematikMula harja kampung
-                    tematik Mula harja kampung tematik Mula harja kampung
-                    tematik Mula harja kampung tematikMula harja kampung tematik
-                    Mula harja kampung tematik Mula harja kampung tematik Mula
-                    harja kampung tematik
-                  </p>
-                  <h4>Alat Panen</h4>
-                  <p>
-                    harja kampung tematik Mula harja kampung tematik Mula harja
-                    kampung tematik Mula harja kampung tematikMula harja kampung
-                    tematik Mula harja kampung tematik Mula harja kampung
-                  </p>
-                  <div className="row align-items-lg-center">
-                    <div className="col-lg-5">
-                      <ul className="check-list">
-                        <li>
-                          <i className="fas fa-badge-check" />
-                          Traktor
-                        </li>
-                        <li>
-                          <i className="fas fa-badge-check" />
-                          Parit
-                        </li>
-                        <li>
-                          <i className="fas fa-badge-check" />
-                          Gunting
-                        </li>
-                        <li>
-                          <i className="fas fa-badge-check" />
-                          Gubuk
-                        </li>
-                        <li>
-                          <i className="fas fa-badge-check" />
-                          Visit 5 Best Places With Group
-                        </li>
-                        <li>
-                          <i className="fas fa-badge-check" />
-                          Motorhome service
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="col-lg-7">
-                      <img
-                        src="https://desasawahan.gunungkidulkab.go.id/assets/files/artikel/sedang_1518771293Gambar-CARA-PANEN-Padi.jpg"
-                        className="mb-20 w-100"
-                        alt="place image"
-                      />
-                    </div>
-                  </div>
-                  <h4>Tahapan Panen</h4>
-                  <p>
-                    kampung tematik Mula harja kampung tematikMula harja kampung
-                    tematik Mula harja kampung tematik Mula harja kampung
-                  </p>
-                </div>
-                {/*=== Days Area ===*/}
-                <Tab.Container defaultActiveKey={"day1"}>
-                  <div className="days-area mb-55 wow fadeInUp">
-                    <Nav as={"ul"} className="nav nav-tabs mb-35">
-                      <Nav.Item as={"li"} className="nav-item">
-                        <Nav.Link
-                          as="button"
-                          className="nav-link"
-                          eventKey="day1"
-                        >
-                          Pemanenan
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as={"li"} className="nav-item">
-                        <Nav.Link
-                          as="button"
-                          className="nav-link"
-                          eventKey="day2"
-                        >
-                          Perontokan
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as={"li"} className="nav-item">
-                        <Nav.Link
-                          as="button"
-                          className="nav-link"
-                          eventKey="day3"
-                        >
-                          Pengangkutan
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as={"li"} className="nav-item">
-                        <Nav.Link
-                          as="button"
-                          className="nav-link"
-                          eventKey="day4"
-                        >
-                          Pengeringan
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item as={"li"} className="nav-item">
-                        <Nav.Link
-                          as="button"
-                          className="nav-link"
-                          eventKey="day5"
-                        >
-                          Penyimpanan
-                        </Nav.Link>
-                      </Nav.Item>
-                    </Nav>
-                    <Tab.Content className="tab-content">
-                      <Tab.Pane className="tab-pane fade" eventKey="day1">
-                        <div className="content-box">
-                          <p>
-                            Nemo enim ipsam voluptatem quia voluptas sit
-                            aspernatur aut odit aut fugit sed quia consequuntur
-                            magne doloreseos qui ratione voluptatem sequi
-                            nesciunt. Neque porro quisquam est, qui dolorem
-                            ipsum quia dolor si amet consectetur adipisci velit
-                            sed quian numquam eius modi tempora incidunt
-                          </p>
-                          <ul className="check-list">
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              Tidal ada
-                            </li>
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              Sport
-                            </li>
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              Mountain Hiking
-                            </li>
-                          </ul>
-                        </div>
-                      </Tab.Pane>
-                      <Tab.Pane className="tab-pane fade" eventKey="day2">
-                        <div className="content-box">
-                          <p>
-                            Nemo enim ipsam voluptatem quia voluptas sit
-                            aspernatur aut odit aut fugit sed quia consequuntur
-                            magne doloreseos qui ratione voluptatem sequi
-                            nesciunt. Neque porro quisquam est, qui dolorem
-                            ipsum quia dolor si amet consectetur adipisci velit
-                            sed quian numquam eius modi tempora incidunt
-                          </p>
-                          <ul className="check-list">
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              Tidal ada
-                            </li>
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              kayaking Sport
-                            </li>
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              Mountain Hiking
-                            </li>
-                          </ul>
-                        </div>
-                      </Tab.Pane>
-                      <Tab.Pane className="tab-pane fade" eventKey="day3">
-                        <div className="content-box">
-                          <p>
-                            Nemo enim ipsam voluptatem quia voluptas sit
-                            aspernatur aut odit aut fugit sed quia consequuntur
-                            magne doloreseos qui ratione voluptatem sequi
-                            nesciunt. Neque porro quisquam est, qui dolorem
-                            ipsum quia dolor si amet consectetur adipisci velit
-                            sed quian numquam eius modi tempora incidunt
-                          </p>
-                          <ul className="check-list">
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              Tidal ada
-                            </li>
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              kayaking Sport
-                            </li>
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              Mountain Hiking
-                            </li>
-                          </ul>
-                        </div>
-                      </Tab.Pane>
-                      <Tab.Pane className="tab-pane fade" eventKey="day4">
-                        <div className="content-box">
-                          <p>
-                            Nemo enim ipsam voluptatem quia voluptas sit
-                            aspernatur aut odit aut fugit sed quia consequuntur
-                            magne doloreseos qui ratione voluptatem sequi
-                            nesciunt. Neque porro quisquam est, qui dolorem
-                            ipsum quia dolor si amet consectetur adipisci velit
-                            sed quian numquam eius modi tempora incidunt
-                          </p>
-                          <ul className="check-list">
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              Tidal ada
-                            </li>
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              kayaking Sport
-                            </li>
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              Mountain Hiking
-                            </li>
-                          </ul>
-                        </div>
-                      </Tab.Pane>
-                      <Tab.Pane className="tab-pane fade" eventKey="day5">
-                        <div className="content-box">
-                          <p>
-                            Nemo enim ipsam voluptatem quia voluptas sit
-                            aspernatur aut odit aut fugit sed quia consequuntur
-                            magne doloreseos qui ratione voluptatem sequi
-                            nesciunt. Neque porro quisquam est, qui dolorem
-                            ipsum quia dolor si amet consectetur adipisci velit
-                            sed quian numquam eius modi tempora incidunt
-                          </p>
-                          <ul className="check-list">
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              Tidal ada
-                            </li>
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              kayaking Sport
-                            </li>
-                            <li>
-                              <i className="fas fa-badge-check" />
-                              Mountain Hiking
-                            </li>
-                          </ul>
-                        </div>
-                      </Tab.Pane>
-                    </Tab.Content>
-                  </div>
-                </Tab.Container>
+                <div
+                  className="mb-4"
+                  dangerouslySetInnerHTML={{
+                    __html: videos.details?.description,
+                  }}
+                />
 
                 {/*===  Comments Form  ===*/}
                 <div className="comments-respond mb-30 wow fadeInUp">
@@ -367,19 +135,13 @@ const TourDetails = () => {
                       <li>
                         <span>
                           <i className="far fa-calendar-alt" />
-                          Tanggal<span>21 Agustus 2024</span>
+                          Tanggal<span>{videos.details?.date}</span>
                         </span>
                       </li>
                       <li>
                         <span>
                           <i className="far fa-map-marker-alt" />
-                          Lokasi<span>Mulaharja</span>
-                        </span>
-                      </li>
-                      <li>
-                        <span>
-                          <i className="far fa-globe" />
-                          Bahasa<span>Indonesia</span>
+                          Lokasi<span>{videos.details?.location}</span>
                         </span>
                       </li>
                     </ul>
@@ -388,119 +150,41 @@ const TourDetails = () => {
                   <div className="sidebar-widget recent-place-widget mb-40 wow fadeInUp">
                     <h4 className="widget-title">Video Lainnya</h4>
                     <ul className="recent-place-list">
-                      <li className="place-thumbnail-content">
-                        <img
-                          src="assets/images/place/thumb-1.jpg"
-                          alt="post thumb"
-                        />
-                        <div className="place-content">
-                          <ul className="ratings">
-                            <li>
-                              <i className="fas fa-star" />
+                      {videos.data.data && videos.data.data.length > 0
+                        ? videos.data.data.slice(0, 2).map((data) => (
+                            <li className="place-thumbnail-content">
+                              <img src={data.cover} alt="post thumb" />
+                              <div className="place-content">
+                                <ul className="ratings">
+                                  <li>
+                                    <i className="fas fa-star" />
+                                  </li>
+                                  <li>
+                                    <i className="fas fa-star" />
+                                  </li>
+                                  <li>
+                                    <i className="fas fa-star" />
+                                  </li>
+                                  <li>
+                                    <i className="fas fa-star" />
+                                  </li>
+                                  <li>
+                                    <i className="far fa-star" />
+                                  </li>
+                                </ul>
+                                <h5>
+                                  <Link
+                                    legacyBehavior
+                                    href={`/video-detail?id=${data.id}`}
+                                  >
+                                    <a>{data.title}</a>
+                                  </Link>
+                                </h5>
+                              </div>
                             </li>
-                            <li>
-                              <i className="fas fa-star" />
-                            </li>
-                            <li>
-                              <i className="fas fa-star" />
-                            </li>
-                            <li>
-                              <i className="fas fa-star" />
-                            </li>
-                            <li>
-                              <i className="far fa-star" />
-                            </li>
-                          </ul>
-                          <h5>
-                            <Link legacyBehavior href="/tour-details">
-                              <a>Infinity Pool Nears Beach</a>
-                            </Link>
-                          </h5>
-                        </div>
-                      </li>
-                      <li className="place-thumbnail-content">
-                        <img
-                          src="assets/images/place/thumb-2.jpg"
-                          alt="post thumb"
-                        />
-                        <div className="place-content">
-                          <ul className="ratings">
-                            <li>
-                              <i className="fas fa-star" />
-                            </li>
-                            <li>
-                              <i className="fas fa-star" />
-                            </li>
-                            <li>
-                              <i className="fas fa-star" />
-                            </li>
-                            <li>
-                              <i className="fas fa-star" />
-                            </li>
-                            <li>
-                              <i className="fas fa-star-half-alt" />
-                            </li>
-                          </ul>
-                          <h5>
-                            <Link legacyBehavior href="/video-detail">
-                              <a>Infinity Pool Nears Beach</a>
-                            </Link>
-                          </h5>
-                        </div>
-                      </li>
-                      <li className="place-thumbnail-content">
-                        <img
-                          src="assets/images/place/thumb-3.jpg"
-                          alt="post thumb"
-                        />
-                        <div className="place-content">
-                          <ul className="ratings">
-                            <li>
-                              <i className="fas fa-star" />
-                            </li>
-                            <li>
-                              <i className="fas fa-star" />
-                            </li>
-                            <li>
-                              <i className="fas fa-star" />
-                            </li>
-                            <li>
-                              <i className="fas fa-star" />
-                            </li>
-                            <li>
-                              <i className="fas fa-star" />
-                            </li>
-                          </ul>
-                          <h5>
-                            <Link legacyBehavior href="/video-detail">
-                              <a>Infinity Pool Nears Beach</a>
-                            </Link>
-                          </h5>
-                        </div>
-                      </li>
+                          ))
+                        : ""}
                     </ul>
-                  </div>
-                  {/*=== Banner Widget ===*/}
-                  <div className="sidebar-widget sidebar-banner-widget wow fadeInUp mb-40">
-                    <div className="banner-widget-content">
-                      <div className="banner-img">
-                        <img
-                          src="assets/images/blog/banner-1.jpg"
-                          alt="Post Banner"
-                        />
-                        <div className="hover-overlay">
-                          <div className="hover-content">
-                            <h4 className="title">
-                              <a href="#">Swimming Pool</a>
-                            </h4>
-                            <p>
-                              <i className="fas fa-map-marker-alt" />
-                              Marrakesh, Morocco
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -515,4 +199,4 @@ const TourDetails = () => {
     </Layout>
   );
 };
-export default TourDetails;
+export default VideoDetail;

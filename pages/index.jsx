@@ -8,7 +8,28 @@ import {
 } from "@/src/sliderProps";
 import Link from "next/link";
 import Slider from "react-slick";
+
+import { useDispatch, useSelector } from "react-redux";
+import { fetchVideos } from "@/redux/actions/videos";
+import { fetchNews } from "@/redux/actions/news";
+import { useEffect } from "react";
+
 const index = () => {
+  const dispatch = useDispatch();
+  const category = useSelector((state) => state.category);
+  const videos = useSelector((state) => state.videos);
+  const news = useSelector((state) => state.news);
+
+  useEffect(() => {
+    if (videos.status === "idle") {
+      dispatch(fetchVideos({}));
+    }
+  }, [videos.status, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchNews({}));
+  }, [dispatch]);
+
   return (
     <Layout header={2} extraClass={"pt-160"}>
       {/*====== Start Hero Section ======*/}
@@ -128,79 +149,35 @@ const index = () => {
               </div>
             </div>
           </div>
-          <div className="row">
-            <div className="col-xl-3 col-md-6 col-sm-12">
-              {/*=== Features Image Item ===*/}
-              <div className="single-features-item-two mb-40 wow fadeInUp">
-                <div className="img-holder">
-                  <img
-                    height={360}
-                    style={{ objectFit: "cover", width: "100%" }}
-                    src="https://pangannews.id/public/_blog_images/pusat_46ce9c1a-d6d8-4374-9a74-9a744bb19e19_news.jpeg"
-                    alt="Features Image"
-                  />
-                  <div className="item-overlay">
-                    <div className="content">
-                      <h3 className="title">Edukasi</h3>
+          <div className="row justify-content-center">
+            {category.data &&
+            category.data.data &&
+            category.data.data.length > 0 ? (
+              category.data.data.map((data) => (
+                <div className="col-xl-3 col-md-6 col-sm-12" key={data.id}>
+                  {/*=== Features Image Item ===*/}
+                  <div className="single-features-item-two mb-40 wow fadeInUp">
+                    <div className="img-holder">
+                      <img
+                        height={360}
+                        style={{ objectFit: "cover", width: "100%" }}
+                        src={data.image_url}
+                        alt="Features Image"
+                      />
+                      <div className="item-overlay">
+                        <div className="content">
+                          <h3 className="title">{data.name}</h3>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="col-12">
+                <p>No data available.</p>
               </div>
-            </div>
-            <div className="col-xl-3 col-md-6 col-sm-12">
-              {/*=== Features Image Item ===*/}
-              <div className="single-features-item-two mb-40 wow fadeInUp">
-                <div className="img-holder">
-                  <img
-                    height={360}
-                    style={{ objectFit: "cover", width: "100%" }}
-                    src="https://awsimages.detik.net.id/community/media/visual/2021/02/07/kampung-tematik-mulyaharja.jpeg?w=4000"
-                    alt="Features Image"
-                  />
-                  <div className="item-overlay">
-                    <div className="content">
-                      <h3 className="title">Kuliner</h3>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-3 col-md-6 col-sm-12">
-              {/*=== Features Image Item ===*/}
-              <div className="single-features-item-two mb-40 wow fadeInUp">
-                <div className="img-holder">
-                  <img
-                    height={360}
-                    style={{ objectFit: "cover", width: "100%" }}
-                    src="https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:best,w_640/v1634025439/16b677647983590a2f78a0ef166aabb34c2e5963f4a291cbfe21a121278ed986.jpg"
-                    alt="Features Image"
-                  />
-                  <div className="item-overlay">
-                    <div className="content">
-                      <h3 className="title">Spot Foto</h3>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-3 col-md-6 col-sm-12">
-              {/*=== Features Image Item ===*/}
-              <div className="single-features-item-two mb-40 wow fadeInUp">
-                <div className="img-holder">
-                  <img
-                    height={360}
-                    style={{ objectFit: "cover", width: "100%" }}
-                    src="https://awsimages.detik.net.id/community/media/visual/2021/02/06/kampung-tematik-mulyaharja-bogor-23.jpeg?w=3000"
-                    alt="Features Image"
-                  />
-                  <div className="item-overlay">
-                    <div className="content">
-                      <h3 className="title">Wisata</h3>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -220,37 +197,31 @@ const index = () => {
           </div>
           {/*=== Service Slider One ===*/}
           <Slider {...home1Slider} className="hero-slider-one bg-services">
-            {/*=== Single Service Item ===*/}
-            <div className="single-service-item-two video-section">
-              <div className="section-title text-center text-white mb-50 wow fadeInDown">
-                <h2>Mengenal Panen di Mulaharja</h2>
+            {videos.data.data && videos.data.data.length > 0 ? (
+              videos.data.data.map((data) => (
+                <div
+                  className="single-service-item-two video-section"
+                  key={data.id}
+                >
+                  <div className="section-title text-center text-white mb-50 wow fadeInDown">
+                    <h2>Mengenal Panen di Mulaharja</h2>
+                  </div>
+                  <iframe
+                    width="560"
+                    height="600"
+                    src={`https://www.youtube.com/embed/${data.youtube_id}`}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              ))
+            ) : (
+              <div className="col-12">
+                <p>No data available.</p>
               </div>
-              <iframe
-                width="560"
-                height="600"
-                src={`https://www.youtube.com/embed/gZb398QbrpM?si=lm9HkPC7d5B5IRbq`}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
-            {/*=== Single Service Item ===*/}
-
-            <div className="single-service-item-two video-section">
-              <div className="section-title text-center text-white mb-50 wow fadeInDown">
-                <h2>Hijaunya Kampung Tematik Mulaharja</h2>
-              </div>
-              <iframe
-                width="560"
-                height="600"
-                src={`https://www.youtube.com/embed/Ehcl6kGDWWQ?si=_4hFi6hzuXbTFT0t`}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
+            )}
           </Slider>
         </div>
       </section>
@@ -285,68 +256,47 @@ const index = () => {
               </div>
             </div>
             <div className="col-xl-6">
-              {/*=== Single Blog Post ===*/}
-              <div className="single-blog-post-two mb-40 wow fadeInUp">
-                <div className="post-thumbnail">
-                  <img
-                    src="https://i0.wp.com/bogordaily.net/wp-content/uploads/2022/07/IMG-20220711-WA0014.jpg "
-                    alt="Blog Image"
-                  />
-                </div>
-                <div className="entry-content">
-                  <div className="post-meta">
-                    <span>
-                      <i className="far fa-calendar-alt" />
-                      <a href="#">Agustus 15, 2024</a>
-                    </span>
-                    <h3 className="title">
-                      <Link legacyBehavior href="/blog-details">
-                        <a className="title-span">
-                          Sensasi kulineran di tangah sawah
-                        </a>
-                      </Link>
-                    </h3>
-                    <Link legacyBehavior href="/blog-details">
-                      <a className="main-btn filled-btn">
-                        Read More
-                        <i className="far fa-paper-plane" />
-                      </a>
-                    </Link>
+              {news.data.data && news.data.data.length > 0 ? (
+                news.data.data.slice(0, 2).map((data) => (
+                  <div
+                    className="single-blog-post-two mb-40 wow fadeInUp"
+                    key={data.id}
+                  >
+                    <div className="post-thumbnail">
+                      <img src={data.cover} alt="Blog Image" />
+                    </div>
+                    <div className="entry-content">
+                      <div className="post-meta">
+                        <span>
+                          <i className="far fa-calendar-alt" />
+                          <a href="#">{data.date}</a>
+                        </span>
+                        <h3 className="title">
+                          <Link
+                            legacyBehavior
+                            href={`/blog-details?id=${data.id}`}
+                          >
+                            <a className="title-span">{data.title}</a>
+                          </Link>
+                        </h3>
+                        <Link
+                          legacyBehavior
+                          href={`/blog-details?id=${data.id}`}
+                        >
+                          <a className="main-btn filled-btn">
+                            Read More
+                            <i className="far fa-paper-plane" />
+                          </a>
+                        </Link>
+                      </div>
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="col-12">
+                  <p>No data available.</p>
                 </div>
-              </div>
-              {/*=== Single Blog Post ===*/}
-              <div className="single-blog-post-two mb-40 wow fadeInDown">
-                <div className="post-thumbnail">
-                  <img
-                    src="https://awsimages.detik.net.id/community/media/visual/2021/02/06/kampung-tematik-mulyaharja-bogor-3.jpeg?w=3000 
-https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:best,w_1024/v1634025439/01gbc6k8226fbvdcm9xwtf9j61.jpg "
-                    alt="Blog Image"
-                  />
-                </div>
-                <div className="entry-content">
-                  <div className="post-meta">
-                    <span>
-                      <i className="far fa-calendar-alt" />
-                      <a href="#">Agustus 15, 2024</a>
-                    </span>
-                    <h3 className="title">
-                      <Link legacyBehavior href="/blog-details">
-                        <a className="title-span">
-                          Sensasi menikmati asrinya persawahan dengan bermalam
-                          di rumah warga
-                        </a>
-                      </Link>
-                    </h3>
-                    <Link legacyBehavior href="/blog-details">
-                      <a className="main-btn filled-btn">
-                        Read More
-                        <i className="far fa-paper-plane" />
-                      </a>
-                    </Link>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -354,131 +304,39 @@ https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:bes
             {...sliderActive4Item}
             className="slider-active-4-item wow fadeInUp"
           >
-            {/*=== Features Image Item ===*/}
-            <div className="single-features-item mb-40">
-              <div className="img-holder">
-                <img
-                  height={360}
-                  style={{ objectFit: "cover", width: "100%" }}
-                  src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhHCgB012oZ_twpYtRwlD-X29mRyg8pUYn9pMBn3vcPfuwPsuk_-EHMweq0MOjr1oXLL8llQ_ECAefMlTRuVK-Z6CF-lFtDiWGhAujiaQLLwRqJlGXQQtd7xQMZKw7mgekJkZdl5UOsSndcjnw_aLP2iOzTRNTvzMI2Mt-Iqf7Xt6NPkJjULzaDPWpf1QUH/s1314/trekking%20kampung%20wisata%20mulyaharja%20bogor%206.jpg"
-                  alt="Features Image"
-                />
-                <div className="content">
-                  <div className="text">
-                    <h4 className="title title-span">
-                      Sensasi trekking menikmati keindahan desa mulyaharja
-                    </h4>
-                    <Link href="blog-detail" className="icon-btn">
-                      <i className="far fa-arrow-right" />
-                    </Link>
+            {news.data.data && news.data.data.length > 0 ? (
+              news.data.data.map((data) => (
+                <div className="single-features-item mb-40" key={data.id}>
+                  <div className="img-holder">
+                    <img
+                      height={360}
+                      style={{ objectFit: "cover", width: "100%" }}
+                      src={data.cover}
+                      alt="Features Image"
+                    />
+                    <div className="content">
+                      <div className="text">
+                        <h4 className="title title-span">{data.title}</h4>
+                        <Link
+                          href={`/blog-details?id=${data.id}`}
+                          className="icon-btn"
+                        >
+                          <i className="far fa-arrow-right" />
+                        </Link>
+                      </div>
+                      <p>{data.subtitle}</p>
+                      <p className="text-cyan">
+                        <i className="far fa-calendar" /> {data.date}
+                      </p>
+                    </div>
                   </div>
-                  <p>Sensasi trekking menikmati keindahan desa mulyaharja</p>
-                  <p className="text-cyan">
-                    <i className="far fa-calendar" /> 12 November 2024
-                  </p>
                 </div>
+              ))
+            ) : (
+              <div className="col-12">
+                <p>No data available.</p>
               </div>
-            </div>
-            {/*=== Features Image Item ===*/}
-            <div className="single-features-item mb-40">
-              <div className="img-holder">
-                <img
-                  height={360}
-                  style={{ objectFit: "cover", width: "100%" }}
-                  src="https://assets.kompasiana.com/items/album/2021/07/09/img-1903-60e7f58d591cb162567eba82.jpg?t=o&v=555 "
-                  alt="Features Image"
-                />
-                <div className="content">
-                  <div className="text">
-                    <h4 className="title  title-span">
-                      Kegiatan belajar langsung bertani dan berkebun
-                    </h4>
-                    <Link href="blog-details" className="icon-btn">
-                      <i className="far fa-arrow-right" />
-                    </Link>
-                  </div>
-                  <p>Kegiatan belajar langsung bertani dan berkebun</p>
-                  <p className="text-cyan">
-                    <i className="far fa-calendar" /> 12 November 2024
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/*=== Features Image Item ===*/}
-            <div className="single-features-item mb-40">
-              <div className="img-holder">
-                <img
-                  height={360}
-                  style={{ objectFit: "cover", width: "100%" }}
-                  src="https://asset-2.tstatic.net/tribunnews/foto/images/preview/obyek-wisata-kampung-tematik-mulyaharja-bogor_20210602_191117.jpg"
-                  alt="Features Image"
-                />
-                <div className="content">
-                  <div className="text">
-                    <h4 className="title title-span">
-                      Spot selfie yang instagramable
-                    </h4>
-                    <Link href="blog-details" className="icon-btn">
-                      <i className="far fa-arrow-right" />
-                    </Link>
-                  </div>
-                  <p>Spot selfie yang instagramable.</p>
-                  <p className="text-cyan">
-                    <i className="far fa-calendar" /> 12 November 2024
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/*=== Features Image Item ===*/}
-            <div className="single-features-item mb-40">
-              <div className="img-holder">
-                <img
-                  height={360}
-                  style={{ objectFit: "cover", width: "100%" }}
-                  src="https://ruangbogor.com/assets/berita/original/66316090292-mulyaharja.jpg"
-                  alt="Features Image"
-                />
-                <div className="content">
-                  <div className="text">
-                    <h4 className="title title-span">
-                      Melihat pemandangan sawah yang luas
-                    </h4>
-                    <Link href="blog-details" className="icon-btn">
-                      <i className="far fa-arrow-right" />
-                    </Link>
-                  </div>
-                  <p>Melihat pemandangan sawah yang luas</p>
-                  <p className="text-cyan">
-                    <i className="far fa-calendar" /> 12 November 2024
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/*=== Features Image Item ===*/}
-            <div className="single-features-item mb-40">
-              <div className="img-holder">
-                <img
-                  height={360}
-                  style={{ objectFit: "cover", width: "100%" }}
-                  src="https://assets.kompasiana.com/items/album/2021/07/09/img-1903-60e7f58d591cb162567eba82.jpg?t=o&v=555 "
-                  alt="Features Image"
-                />
-                <div className="content">
-                  <div className="text">
-                    <h4 className="title  title-span">
-                      Kegiatan belajar langsung bertani dan berkebun
-                    </h4>
-                    <Link href="blog-details" className="icon-btn">
-                      <i className="far fa-arrow-right" />
-                    </Link>
-                  </div>
-                  <p>Kegiatan belajar langsung bertani dan berkebun</p>
-                  <p className="text-cyan">
-                    <i className="far fa-calendar" /> 12 November 2024
-                  </p>
-                </div>
-              </div>
-            </div>
+            )}
           </Slider>
         </div>
       </section>

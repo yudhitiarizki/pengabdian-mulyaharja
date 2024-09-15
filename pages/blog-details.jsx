@@ -2,10 +2,31 @@ import GallerySection from "@/src/components/GallerySection";
 import PageBanner from "@/src/components/PageBanner";
 import Layout from "@/src/layout/Layout";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDetailNews, fetchRecentNews } from "@/redux/actions/news";
+import { useEffect } from "react";
+
 const BlogDetails = () => {
+  const dispatch = useDispatch();
+
+  const { query } = useRouter();
+  const { id } = query;
+
+  const news = useSelector((state) => state.news);
+  const category = useSelector((state) => state.category);
+
+  useEffect(() => {
+    dispatch(fetchRecentNews());
+  }, [news.recent, dispatch]);
+
+  useEffect(() => {
+    if (id) dispatch(fetchDetailNews(id));
+  }, [dispatch, id]);
+
   return (
     <Layout header={2} extraClass={"pt-160"}>
-      <PageBanner pageTitle={"Detail Berita"} />
+      <PageBanner pageTitle={news.details?.title} />
       {/*====== Start Blog Details Section ======*/}
       <section className="blog-details-section pt-100 pb-70">
         <div className="container">
@@ -15,72 +36,36 @@ const BlogDetails = () => {
               <div className="blog-details-wrapper pr-lg-50">
                 <div className="blog-post mb-60 wow fadeInUp">
                   <div className="post-thumbnail">
-                    <img
-                      src="https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:best,w_1024/v1634025439/01gb9nxgctzhzsq0kgr9rgn71f.jpg"
-                      alt="Blog Image"
-                    />
+                    <img src={news.details?.cover} alt="Blog Image" />
                   </div>
                   <div className="post-meta text-center pt-25 pb-15 mb-25">
                     <span>
                       <i className="far fa-calendar-alt" />
-                      <a href="#">November 23,2022</a>
+                      <a href="#">{news.details?.date}</a>
                     </span>
-                    <span>
+                    {/* <span>
                       <i className="far fa-comment" />
                       <a href="#">Comments (05)</a>
-                    </span>
+                    </span> */}
                   </div>
                   <div className="main-post">
                     <div className="entry-content">
-                      <h3 className="title">
-                        Pengalaman baru melalui edukasi pertanian di Desa
-                        Mulyaharja
-                      </h3>
-                      <p>
-                        Di Desa Wisata Mulyaharja, Anda dapat merasakan
-                        pengalaman mendalam melalui kegiatan edukasi pertanian.
-                        Wisatawan diajak untuk terjun langsung ke sawah,
-                        memegang cangkul, dan merasakan sensasi membajak tanah
-                        seperti petani tradisional. Kegiatan ini dimulai dengan
-                        membajak sawah menggunakan mesin atau bahkan kerbau,
-                        tergantung pada metode yang dipilih. Setelah itu, Anda
-                        akan belajar cara menanam padi, dengan memperhatikan
-                        jarak tanam yang tepat agar tanaman dapat tumbuh dengan
-                        optimal. consectetur sed.
-                      </p>
-                      <h4>Desa Mulaharja</h4>
-                      <p>
-                        Selama kegiatan ini, para petani lokal akan mendampingi
-                        dan memberikan penjelasan mengenai berbagai teknik
-                        bertani, termasuk cara menjaga kesuburan tanah dan
-                        bagaimana memanfaatkan metode pertanian organik yang
-                        ramah lingkungan. Kegiatan ini tidak hanya menyenangkan,
-                        tetapi juga memberikan wawasan mendalam tentang
-                        pentingnya pertanian dalam kehidupan sehari-hari, serta
-                        bagaimana desa ini mempertahankan praktik-praktik
-                        pertanian yang berkelanjutan. Kegiatan ini cocok untuk
-                        semua usia, menjadikannya aktivitas yang sempurna untuk
-                        keluarga atau kelompok yang ingin belajar lebih banyak
-                        tentang kehidupan pedesaan dan pertanian organik.
-                      </p>
-                      <blockquote className="block-quote">
-                        <img
-                          src="assets/images/blog/quote.png"
-                          alt="quote image"
-                        />
-                        <h3>
-                          Pengalaman baru melalui edukasi pertanian di Desa
-                          Mulyaharja
-                        </h3>
-                        <span>Yudhitia, Rizki</span>
-                      </blockquote>
+                      {/* <h3 className="title">{news.details.title}</h3> */}
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: news.details?.description,
+                        }}
+                      />
                     </div>
                   </div>
                   <div className="entry-footer wow fadeInUp">
                     <div className="tag-links">
-                      <h6>Tag Populer</h6>
-                      <a href="#">Edukasi</a>
-                      <a href="#">Spot Foto</a>
+                      <h6>Tag</h6>
+                      {news.details?.tags
+                        ? news.details?.tags
+                            .split("|")
+                            .map((tag) => <a href="#">{tag}</a>)
+                        : ""}
                     </div>
                     <div className="social-share">
                       <h6>Share News :</h6>
@@ -101,7 +86,7 @@ const BlogDetails = () => {
                 </div>
 
                 {/*===  Post Navigation  ===*/}
-                <div className="post-navigation-item pb-30 mb-55 wow fadeInUp">
+                {/* <div className="post-navigation-item pb-30 mb-55 wow fadeInUp">
                   <div className="prev-post post-nav-item d-flex mb-30">
                     <div className="thumb">
                       <img
@@ -150,9 +135,9 @@ const BlogDetails = () => {
                       </span>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 {/*===  Comments Area  ===*/}
-                <div className="comments-area mb-60 wow fadeInUp">
+                {/* <div className="comments-area mb-60 wow fadeInUp">
                   <h5 className="comments-title mb-40">Popular Comments</h5>
                   <ul className="comments-list">
                     <li>
@@ -242,8 +227,9 @@ const BlogDetails = () => {
                       </div>
                     </li>
                   </ul>
-                </div>
+                </div> */}
                 {/*===  Comments Form  ===*/}
+
                 <div
                   className="comments-respond mb-30 wow fadeInUp"
                   id="comment-respond"
@@ -287,7 +273,10 @@ const BlogDetails = () => {
                       </div>
                       <div className="col-lg-12">
                         <div className="form_group">
-                          <button className="main-btn primary-btn">
+                          <button
+                            type="button"
+                            className="main-btn primary-btn"
+                          >
                             Kirim Komentar
                             <i className="fas fa-angle-double-right" />
                           </button>
@@ -318,91 +307,56 @@ const BlogDetails = () => {
                     </div>
                   </form>
                 </div>
+
                 {/*=== Category Widget ===*/}
                 <div className="sidebar-widget category-widget mb-30 wow fadeInUp">
                   <h4 className="widget-title">Kategori</h4>
                   <ul className="category-nav">
-                    <li>
-                      <a href="#">
-                        Edukasi
-                        <i className="far fa-arrow-right" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        Kuliner
-                        <i className="far fa-arrow-right" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        Spot Foto
-                        <i className="far fa-arrow-right" />
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        Wisata
-                        <i className="far fa-arrow-right" />
-                      </a>
-                    </li>
+                    {category.data.data && category.data.data.length > 0 ? (
+                      category.data.data.map((data) => (
+                        <li key={data.id}>
+                          <a href={`/blog-list?kategori=${data.id}`}>
+                            {data.name}
+                            <i className="far fa-arrow-right" />
+                          </a>
+                        </li>
+                      ))
+                    ) : (
+                      <div className="col-12">
+                        <p>No data available.</p>
+                      </div>
+                    )}
                   </ul>
                 </div>
                 {/*=== Recent Post Widget ===*/}
                 <div className="sidebar-widget recent-post-widget mb-40 wow fadeInUp">
                   <h4 className="widget-title">Recent News</h4>
                   <ul className="recent-post-list">
-                    <li className="post-thumbnail-content">
-                      <img
-                        src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhHCgB012oZ_twpYtRwlD-X29mRyg8pUYn9pMBn3vcPfuwPsuk_-EHMweq0MOjr1oXLL8llQ_ECAefMlTRuVK-Z6CF-lFtDiWGhAujiaQLLwRqJlGXQQtd7xQMZKw7mgekJkZdl5UOsSndcjnw_aLP2iOzTRNTvzMI2Mt-Iqf7Xt6NPkJjULzaDPWpf1QUH/s1314/trekking%20kampung%20wisata%20mulyaharja%20bogor%206.jpg"
-                        alt="post thumb"
-                      />
-                      <div className="post-title-date">
-                        <h5>
-                          <Link legacyBehavior href="/blog-details">
-                            Sensasi trekking menikmati keindahan desa mulyaharja
-                          </Link>
-                        </h5>
-                        <span className="posted-on">
-                          <i className="far fa-calendar-alt" />
-                          <a href="#">November 23,2022</a>
-                        </span>
+                    {news.recent && news.recent.length > 0 ? (
+                      news.recent.map((data) => (
+                        <li className="post-thumbnail-content" key={data.id}>
+                          <img src={data.cover} alt="post thumb" />
+                          <div className="post-title-date">
+                            <h5>
+                              <Link
+                                legacyBehavior
+                                href={`/blog-details?id=${data.id}`}
+                              >
+                                {data.title}
+                              </Link>
+                            </h5>
+                            <span className="posted-on">
+                              <i className="far fa-calendar-alt" />
+                              <a href="#">{data.date}</a>
+                            </span>
+                          </div>
+                        </li>
+                      ))
+                    ) : (
+                      <div className="col-12">
+                        <p>No data available.</p>
                       </div>
-                    </li>
-                    <li className="post-thumbnail-content">
-                      <img
-                        src="https://assets.kompasiana.com/items/album/2021/07/09/img-1903-60e7f58d591cb162567eba82.jpg?t=o&v=555"
-                        alt="post thumb"
-                      />
-                      <div className="post-title-date">
-                        <h5>
-                          <Link legacyBehavior href="/blog-details">
-                            Kegiatan belajar langsung bertani dan berkebun
-                          </Link>
-                        </h5>
-                        <span className="posted-on">
-                          <i className="far fa-calendar-alt" />
-                          <a href="#">November 23,2022</a>
-                        </span>
-                      </div>
-                    </li>
-                    <li className="post-thumbnail-content">
-                      <img
-                        src="https://asset-2.tstatic.net/tribunnews/foto/images/preview/obyek-wisata-kampung-tematik-mulyaharja-bogor_20210602_191117.jpg"
-                        alt="post thumb"
-                      />
-                      <div className="post-title-date">
-                        <h5>
-                          <Link legacyBehavior href="/blog-details">
-                            Spot selfie yang instagramable
-                          </Link>
-                        </h5>
-                        <span className="posted-on">
-                          <i className="far fa-calendar-alt" />
-                          <a href="#">November 23,2022</a>
-                        </span>
-                      </div>
-                    </li>
+                    )}
                   </ul>
                 </div>
 

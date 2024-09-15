@@ -1,11 +1,31 @@
+import { fetchDetailProduct, fetchProduct } from "@/redux/actions/product";
+import GallerySection from "@/src/components/GallerySection";
 import PageBanner from "@/src/components/PageBanner";
 import ProductDetailsSlider from "@/src/components/sliders/ProductDetailsSlider";
 import Layout from "@/src/layout/Layout";
 import { sliderActive3Item, sliderActive5Item } from "@/src/sliderProps";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { Nav, Tab } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
 const ProductDetails = () => {
+  const dispatch = useDispatch();
+
+  const { query } = useRouter();
+  const { id } = query;
+
+  const product = useSelector((state) => state.product);
+
+  useEffect(() => {
+    dispatch(fetchProduct({}));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (id) dispatch(fetchDetailProduct(id));
+  }, [dispatch, id]);
+
   return (
     <Layout header={2} extraClass={"pt-160"}>
       <PageBanner pageTitle={"Product Details"} />
@@ -16,11 +36,11 @@ const ProductDetails = () => {
             <div className="row align-items-xl-center">
               <div className="col-lg-6">
                 {/*=== Product Gallery ===*/}
-                <ProductDetailsSlider />
+                <ProductDetailsSlider data={product.details} />
               </div>
               <div className="col-lg-6">
                 <div className="product-info mb-50 pl-lg-70 wow fadeInRight">
-                  <h4 className="title">Beras Organik</h4>
+                  <h4 className="title">{product.details?.name}</h4>
                   <ul className="ratings">
                     <li>
                       <i className="fas fa-star" />
@@ -38,26 +58,18 @@ const ProductDetails = () => {
                       <i className="fas fa-star" />
                     </li>
                     <li>
-                      <a href="#">4.9(Customer Reviews)</a>
+                      <a href="#">4.9</a>
                     </li>
                   </ul>
                   <span className="price">
-                    <span className="currency">Rp</span>232.000
+                    <span className="currency">Rp</span>
+                    {product.details?.price?.toLocaleString("id-ID")}
                   </span>
-                  <p>
-                    Beras organik dari Desa Wisata Mulyaharja merupakan produk
-                    unggulan yang dihasilkan melalui praktik pertanian ramah
-                    lingkungan. Beras ini ditanam tanpa menggunakan pestisida
-                    atau pupuk kimia sintetis, sehingga menjaga kesuburan tanah
-                    dan keberlanjutan lingkungan. Diproses dengan metode
-                    tradisional, beras ini dikenal memiliki rasa yang lebih
-                    pulen dan aroma yang khas.
-                  </p>
-                  <p>
-                    Beras organik dari Desa Wisata Mulyaharja merupakan produk
-                    unggulan yang dihasilkan melalui praktik pertanian ramah
-                    lingkungan.
-                  </p>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: product.details?.description,
+                    }}
+                  />
                   <div className="product-cart mt-20 mb-30">
                     <ul>
                       <li>
@@ -148,7 +160,7 @@ const ProductDetails = () => {
                             Additional Information
                           </Nav.Link>
                         </Nav.Item>
-                        <Nav.Item as={"li"} className="nav-item">
+                        {/* <Nav.Item as={"li"} className="nav-item">
                           <Nav.Link
                             as={"a"}
                             className="nav-link"
@@ -157,7 +169,7 @@ const ProductDetails = () => {
                           >
                             Reviews (2)
                           </Nav.Link>
-                        </Nav.Item>
+                        </Nav.Item> */}
                       </Nav>
                     </div>
                     <Tab.Content className="tab-content wow fadeInUp">
@@ -166,22 +178,11 @@ const ProductDetails = () => {
                         eventKey="descrptions"
                       >
                         <div className="content-box">
-                          <p>
-                            Beras organik dari Desa Wisata Mulyaharja merupakan
-                            produk unggulan yang dihasilkan melalui praktik
-                            pertanian ramah lingkungan. Beras ini ditanam tanpa
-                            menggunakan pestisida atau pupuk kimia sintetis,
-                            sehingga menjaga kesuburan tanah dan keberlanjutan
-                            lingkungan. Diproses dengan metode tradisional,
-                            beras ini dikenal memiliki rasa yang lebih pulen dan
-                            aroma yang khas.
-                          </p>
-                          <p>
-                            Beras organik dari Desa Wisata Mulyaharja merupakan
-                            produk unggulan yang dihasilkan melalui praktik
-                            pertanian ramah lingkungan.miliki rasa yang lebih
-                            pulen dan aroma yang khas.
-                          </p>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: product.details?.description,
+                            }}
+                          />
                         </div>
                       </Tab.Pane>
                       <Tab.Pane
@@ -189,24 +190,7 @@ const ProductDetails = () => {
                         eventKey="information"
                       >
                         <div className="content-box">
-                          <p>
-                            Beras organik dari Desa Wisata Mulyaharja merupakan
-                            produk unggulan yang dihasilkan melalui praktik
-                            pertanian ramah lingkungan. Beras ini ditanam tanpa
-                            menggunakan pestisida atau pupuk kimia sintetis,
-                            sehingga menjaga kesuburan tanah dan keberlanjutan
-                            lingkungan. Diproses dengan metode tradisional,
-                            beras ini dikenal memiliki rasa yang lebih pulen dan
-                            aroma yang khas.
-                          </p>
-                          <p>
-                            Dictum ultrices et suspendisse amet mattis in
-                            pellentesque. Vulputate arcu, consectetur odio donec
-                            nec duis ultrices facilisi. Mauris cursus elit diam,
-                            urna suspendisse et, amet. Vitae ligula ultrices
-                            nulla justo, enim lorem duis. Volutpat sit et neque
-                            aliquam diam at at neque acus augue
-                          </p>
+                          <p>{product.details?.addtional_info}</p>
                         </div>
                       </Tab.Pane>
                       <Tab.Pane className="tab-pane fade" eventKey="reviews">
@@ -238,7 +222,7 @@ const ProductDetails = () => {
                     <div className="review-form-area wow fadeInUp mt-50 mb-40">
                       <h3 className="title">Kirimkan kami review</h3>
                       <p>
-                        We have 3k+ 5star Reviews
+                        Reviews
                         <img src="assets/images/shop/rate.png" alt />
                       </p>
                       <form className="review-form">
@@ -288,7 +272,10 @@ const ProductDetails = () => {
                           </div>
                           <div className="col-lg-12">
                             <div className="form_group">
-                              <button className="main-btn primary-btn">
+                              <button
+                                className="main-btn primary-btn"
+                                type="button"
+                              >
                                 Send Reviews
                                 <i className="fas fa-paper-plane" />
                               </button>
@@ -301,24 +288,31 @@ const ProductDetails = () => {
                 </Tab.Container>
               </div>
               <div className="col-xl-4">
-                <div className="sidebar-widget-area pl-lg-45 mt-30">
-                  {/*=== Banner Widget ===*/}
-                  <div className="sidebar-widget widget-product-banner mb-40 wow fadeInUp">
-                    <div className="banner-content text-center">
-                      <h4 className="title">Souvenir Local</h4>
-                      <img
-                        src="https://i0.wp.com/shopee.co.id/inspirasi-shopee/wp-content/uploads/2018/08/accessories-bags-design-1118715.jpg?fit=1600%2C1067&ssl=1"
-                        alt="Banner Image"
-                      />
-                      <Link legacyBehavior href="/contact">
-                        <a className="main-btn secondary-btn">
-                          Shop Now
-                          <i className="far fa-paper-plane" />
-                        </a>
-                      </Link>
+                {product.data.data && product.data.data.length > 0 ? (
+                  <div className="sidebar-widget-area pl-lg-45 mt-30">
+                    {/*=== Banner Widget ===*/}
+                    <div className="sidebar-widget widget-product-banner mb-40 wow fadeInUp">
+                      <div className="banner-content text-center">
+                        <h4 className="title">{product.data.data[0].name}</h4>
+                        <img
+                          src={product.data.data[0].cover}
+                          alt="Banner Image"
+                        />
+                        <Link
+                          legacyBehavior
+                          href={`/product-details?id=${product.data.data[0].id}`}
+                        >
+                          <a className="main-btn secondary-btn">
+                            Shop Now
+                            <i className="far fa-paper-plane" />
+                          </a>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>
@@ -339,304 +333,79 @@ const ProductDetails = () => {
             {...sliderActive3Item}
             className="slider-active-3-item wow fadeInDown"
           >
-            {/*=== Single Product Item ===*/}
-            <div className="single-product-item mb-50 wow fadeInUp">
-              <div className="img-holder">
-                <img
-                  height={400}
-                  style={{ objectFit: "cover", width: "100%" }}
-                  src="https://bandunginfogaya.com/images/sampul-1647-1647591010.jpg"
-                  alt="Product Image"
-                />
-                <div className="tag"></div>
-                <div className="content-hover">
-                  <Link href="product-details" className="main-btn primary-btn">
-                    Cek Detail
-                    <i className="far fa-shopping-bag" />
-                  </Link>
+            {product.data.data && product.data.data.length > 0 ? (
+              product.data.data.map((data) => (
+                <div
+                  className="single-product-item mb-50 wow fadeInUp"
+                  key={data.id}
+                >
+                  <div className="img-holder">
+                    <img
+                      height={400}
+                      style={{ objectFit: "cover", width: "100%" }}
+                      src={data.cover}
+                      alt="Product Image"
+                    />
+                    <div className="tag"></div>
+                    <div className="content-hover">
+                      <Link
+                        href={`/product-details?id=${data.id}`}
+                        className="main-btn primary-btn"
+                      >
+                        Cek Detail
+                        <i className="far fa-shopping-bag" />
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="content">
+                    <div className="info">
+                      <h4 className="title">
+                        <Link
+                          legacyBehavior
+                          href={`/product-details?id=${data.id}`}
+                        >
+                          <a>{data.name}</a>
+                        </Link>
+                      </h4>
+                      <span className="price">
+                        {/* <span className="prev-price">
+                          <span className="currency">Rp</span>28.00
+                        </span> */}
+                        <span className="currency">Rp</span>
+                        {data.price.toLocaleString("id-ID")}
+                      </span>
+                    </div>
+                    <ul className="ratings">
+                      <li>
+                        <i className="fas fa-star" />
+                      </li>
+                      <li>
+                        <i className="fas fa-star" />
+                      </li>
+                      <li>
+                        <i className="fas fa-star" />
+                      </li>
+                      <li>
+                        <i className="fas fa-star" />
+                      </li>
+                      <li>
+                        <i className="fas fa-star" />
+                      </li>
+                    </ul>
+                  </div>
                 </div>
+              ))
+            ) : (
+              <div className="col-12">
+                <p>No data available.</p>
               </div>
-              <div className="content">
-                <div className="info">
-                  <h4 className="title">
-                    <Link legacyBehavior href="/products-details">
-                      <a>Kue tradisional</a>
-                    </Link>
-                  </h4>
-                  <span className="price">
-                    <span className="prev-price">
-                      <span className="currency">Rp</span>28.00
-                    </span>
-                    <span className="currency">Rp</span>25.00
-                  </span>
-                </div>
-                <ul className="ratings">
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                </ul>
-              </div>
-            </div>
-            {/*=== Single Product Item ===*/}
-            <div className="single-product-item mb-50 wow fadeInUp">
-              <div className="img-holder">
-                <img
-                  height={400}
-                  style={{ objectFit: "cover", width: "100%" }}
-                  src="https://bandunginfogaya.com/images/sampul-1647-1647591010.jpg"
-                  alt="Product Image"
-                />
-                <div className="tag"></div>
-                <div className="content-hover">
-                  <Link href="product-details" className="main-btn primary-btn">
-                    Cek Detail
-                    <i className="far fa-shopping-bag" />
-                  </Link>
-                </div>
-              </div>
-              <div className="content">
-                <div className="info">
-                  <h4 className="title">
-                    <Link legacyBehavior href="/products-details">
-                      <a>Kue tradisional</a>
-                    </Link>
-                  </h4>
-                  <span className="price">
-                    <span className="prev-price">
-                      <span className="currency">Rp</span>28.00
-                    </span>
-                    <span className="currency">Rp</span>25.00
-                  </span>
-                </div>
-                <ul className="ratings">
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                </ul>
-              </div>
-            </div>
-            {/*=== Single Product Item ===*/}
-            <div className="single-product-item mb-50 wow fadeInUp">
-              <div className="img-holder">
-                <img
-                  height={400}
-                  style={{ objectFit: "cover", width: "100%" }}
-                  src="https://bandunginfogaya.com/images/sampul-1647-1647591010.jpg"
-                  alt="Product Image"
-                />
-                <div className="tag"></div>
-                <div className="content-hover">
-                  <Link href="product-details" className="main-btn primary-btn">
-                    Cek Detail
-                    <i className="far fa-shopping-bag" />
-                  </Link>
-                </div>
-              </div>
-              <div className="content">
-                <div className="info">
-                  <h4 className="title">
-                    <Link legacyBehavior href="/products-details">
-                      <a>Kue tradisional</a>
-                    </Link>
-                  </h4>
-                  <span className="price">
-                    <span className="prev-price">
-                      <span className="currency">Rp</span>28.00
-                    </span>
-                    <span className="currency">Rp</span>25.00
-                  </span>
-                </div>
-                <ul className="ratings">
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                </ul>
-              </div>
-            </div>
-            {/*=== Single Product Item ===*/}
-            <div className="single-product-item mb-50 wow fadeInUp">
-              <div className="img-holder">
-                <img
-                  height={400}
-                  style={{ objectFit: "cover", width: "100%" }}
-                  src="https://bandunginfogaya.com/images/sampul-1647-1647591010.jpg"
-                  alt="Product Image"
-                />
-                <div className="tag"></div>
-                <div className="content-hover">
-                  <Link href="product-details" className="main-btn primary-btn">
-                    Cek Detail
-                    <i className="far fa-shopping-bag" />
-                  </Link>
-                </div>
-              </div>
-              <div className="content">
-                <div className="info">
-                  <h4 className="title">
-                    <Link legacyBehavior href="/products-details">
-                      <a>Kue tradisional</a>
-                    </Link>
-                  </h4>
-                  <span className="price">
-                    <span className="prev-price">
-                      <span className="currency">Rp</span>28.00
-                    </span>
-                    <span className="currency">Rp</span>25.00
-                  </span>
-                </div>
-                <ul className="ratings">
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                  <li>
-                    <i className="fas fa-star" />
-                  </li>
-                </ul>
-              </div>
-            </div>
+            )}
           </Slider>
         </div>
       </section>
       {/*====== End Recent Product Section ======*/}
       {/*====== Start Gallery Section ======*/}
-      <section className="gallery-section mbm-150">
-        <div className="container-fluid">
-          <Slider
-            {...sliderActive5Item}
-            className="slider-active-5-item fadeInUp"
-          >
-            {/*=== Single Gallery Item ===*/}
-            <div className="single-gallery-item">
-              <div className="gallery-img">
-                <img src="assets/images/gallery/gl-1.jpg" alt="Gallery Image" />
-                <div className="hover-overlay">
-                  <a
-                    href="assets/images/gallery/gl-1.jpg"
-                    className="icon-btn img-popup"
-                  >
-                    <i className="far fa-plus" />
-                  </a>
-                </div>
-              </div>
-            </div>
-            {/*=== Single Gallery Item ===*/}
-            <div className="single-gallery-item">
-              <div className="gallery-img">
-                <img src="assets/images/gallery/gl-2.jpg" alt="Gallery Image" />
-                <div className="hover-overlay">
-                  <a
-                    href="assets/images/gallery/gl-2.jpg"
-                    className="icon-btn img-popup"
-                  >
-                    <i className="far fa-plus" />
-                  </a>
-                </div>
-              </div>
-            </div>
-            {/*=== Single Gallery Item ===*/}
-            <div className="single-gallery-item">
-              <div className="gallery-img">
-                <img src="assets/images/gallery/gl-3.jpg" alt="Gallery Image" />
-                <div className="hover-overlay">
-                  <a
-                    href="assets/images/gallery/gl-3.jpg"
-                    className="icon-btn img-popup"
-                  >
-                    <i className="far fa-plus" />
-                  </a>
-                </div>
-              </div>
-            </div>
-            {/*=== Single Gallery Item ===*/}
-            <div className="single-gallery-item">
-              <div className="gallery-img">
-                <img src="assets/images/gallery/gl-4.jpg" alt="Gallery Image" />
-                <div className="hover-overlay">
-                  <a
-                    href="assets/images/gallery/gl-4.jpg"
-                    className="icon-btn img-popup"
-                  >
-                    <i className="far fa-plus" />
-                  </a>
-                </div>
-              </div>
-            </div>
-            {/*=== Single Gallery Item ===*/}
-            <div className="single-gallery-item">
-              <div className="gallery-img">
-                <img src="assets/images/gallery/gl-5.jpg" alt="Gallery Image" />
-                <div className="hover-overlay">
-                  <a
-                    href="assets/images/gallery/gl-5.jpg"
-                    className="icon-btn img-popup"
-                  >
-                    <i className="far fa-plus" />
-                  </a>
-                </div>
-              </div>
-            </div>
-            {/*=== Single Gallery Item ===*/}
-            <div className="single-gallery-item">
-              <div className="gallery-img">
-                <img src="assets/images/gallery/gl-3.jpg" alt="Gallery Image" />
-                <div className="hover-overlay">
-                  <a
-                    href="assets/images/gallery/gl-3.jpg"
-                    className="icon-btn img-popup"
-                  >
-                    <i className="far fa-plus" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </Slider>
-        </div>
-      </section>
+      <GallerySection />
       {/*====== End Gallery Section ======*/}
     </Layout>
   );

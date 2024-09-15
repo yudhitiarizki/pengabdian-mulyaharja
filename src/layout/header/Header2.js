@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Menu from "../Menu";
+import { useSelector } from "react-redux";
 const Header2 = () => {
+  const { details } = useSelector((state) => state.profile);
   return (
     <header className="header-area header-one transparent-header">
       {/*====== Header Navigation ======*/}
@@ -12,11 +14,7 @@ const Header2 = () => {
             <div className="site-branding">
               <Link legacyBehavior href="/">
                 <a className="brand-logo">
-                  <img
-                    src="assets/images/logo/logo.png"
-                    alt="Site Logo"
-                    height={50}
-                  />
+                  <img src={details.logo} alt="Site Logo" height={50} />
                 </a>
               </Link>
             </div>
@@ -26,11 +24,7 @@ const Header2 = () => {
               <div className="mobile-logo mb-30 d-block d-xl-none">
                 <Link legacyBehavior href="/">
                   <a className="brand-logo">
-                    <img
-                      src="assets/images/logo/logo.png"
-                      alt="Site Logo"
-                      height={50}
-                    />
+                    <img src={details.logo} alt="Site Logo" height={50} />
                   </a>
                 </Link>
               </div>

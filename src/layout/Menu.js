@@ -1,6 +1,8 @@
 import Link from "next/link";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import SearchModal from "./SearchModal";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCategoryProduct } from "@/redux/actions/product";
 
 const Menu = () => {
   return (
@@ -13,7 +15,16 @@ const Menu = () => {
 export default Menu;
 
 const DeskTopMenu = () => {
-  const [searchModal, setSearchModal] = useState(false);
+  const dispatch = useDispatch();
+
+  const product = useSelector((state) => state.product);
+
+  useEffect(() => {
+    if (product.status === "idle") {
+      dispatch(fetchCategoryProduct());
+    }
+  }, [dispatch, product.status]);
+
   return (
     <Fragment>
       <nav className="main-menu d-none d-xl-block">
@@ -38,12 +49,15 @@ const DeskTopMenu = () => {
               </span>
             </Link>
             <ul className="sub-menu">
-              <li>
-                <Link href="shop">Category 1</Link>
-              </li>
-              <li>
-                <Link href="shop">Category 2</Link>
-              </li>
+              {product.category && product.category.length > 0 ? (
+                product.category.map((data) => (
+                  <li key={data.id}>
+                    <Link href={`shop?kategori=${data.id}`}>{data.name}</Link>
+                  </li>
+                ))
+              ) : (
+                <></>
+              )}
             </ul>
           </li>
           <li className="menu-item">

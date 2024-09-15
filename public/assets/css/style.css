@@ -72,6 +72,11 @@
   background-color: #F9F9F7;
 }
 
+.gowilds-pagination .active a {
+  background: #28AA9B;
+  color: white;
+}
+
 h1 {
   font-size: 85px;
   font-weight: 700;

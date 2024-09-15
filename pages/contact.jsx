@@ -1,7 +1,18 @@
+import { fetchContact } from "@/redux/actions/profile";
 import GallerySection from "@/src/components/GallerySection";
 import PageBanner from "@/src/components/PageBanner";
 import Layout from "@/src/layout/Layout";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 const Contact = () => {
+  const dispatch = useDispatch();
+
+  const { details, contact } = useSelector((state) => state.profile);
+
+  useEffect(() => {
+    dispatch(fetchContact());
+  }, [dispatch]);
+
   return (
     <Layout header={2} extraClass={"pt-160"}>
       <PageBanner pageTitle={"Kontak"} />
@@ -29,9 +40,7 @@ const Contact = () => {
                 </div>
                 <div className="info">
                   <span className="title">Lokasi</span>
-                  <p>
-                    Mulyaharja, Kec. Bogor Sel., Kota Bogor, Jawa Barat 16135
-                  </p>
+                  <p>{details.locations}</p>
                 </div>
               </div>
             </div>
@@ -43,12 +52,13 @@ const Contact = () => {
                 </div>
                 <div className="info">
                   <span className="title">Email Address</span>
-                  <p>
-                    <a href="mailto:mulaharja@gmail.com">mulaharja@gmail.com</a>
-                  </p>
-                  <p>
-                    <a href="mailto:mulaharja.net">mulaharja.net</a>
-                  </p>
+                  {contact && contact.length > 0
+                    ? contact.map((data) => (
+                        <p>
+                          <a href={`mailto:${data.email}`}>{data.email}</a>
+                        </p>
+                      ))
+                    : ""}
                 </div>
               </div>
             </div>
@@ -60,12 +70,15 @@ const Contact = () => {
                 </div>
                 <div className="info">
                   <span className="title">Hotline</span>
-                  <p>
-                    <a href="tel:+021(123)45688">+021 (123) 456 88</a>
-                  </p>
-                  <p>
-                    <a href="tel:+62894123">+628 63 20122</a>
-                  </p>
+                  {contact && contact.length > 0
+                    ? contact.map((data) => (
+                        <p>
+                          <a href={`tel:${data.phone_number}`}>
+                            {data.phone_number}
+                          </a>
+                        </p>
+                      ))
+                    : ""}
                 </div>
               </div>
             </div>
