@@ -35,7 +35,7 @@ const Footer = ({ bg, extraClass }) => {
                 </div>
                 <div className="content">
                   <h3 className="title">
-                    Bersiap Liburan ke Kampung Mulaharja!
+                    Bersiap Liburan ke Wisata Mulyaharja!
                   </h3>
                   <a href="#" className="icon-btn">
                     <i className="far fa-long-arrow-right" />
@@ -55,7 +55,17 @@ const Footer = ({ bg, extraClass }) => {
                 <div className="footer-content">
                   <p>{details.description}</p>
                   <a href="#" className="footer-logo">
-                    <img src={details.logo} height={60} alt="Site Logo" />
+                    <img
+                      className="mr-10"
+                      src={details.logo}
+                      height={60}
+                      alt="Site Logo"
+                    />
+                    <img
+                      src="assets/images/logo/logo_sv.png"
+                      height={45}
+                      alt="Site Logo"
+                    />
                   </a>
                 </div>
               </div>
@@ -120,7 +130,7 @@ const Footer = ({ bg, extraClass }) => {
               {/*=== Footer Text ===*/}
               <div className="footer-text">
                 <p>
-                  Copy@ 2024{" "}
+                  Copyright @2024{" "}
                   <span style={{ color: "#F7921E" }}>{details.name}</span>, All
                   Right Reserved
                 </p>

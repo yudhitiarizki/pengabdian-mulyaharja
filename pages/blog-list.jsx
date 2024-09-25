@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ReactPaginate from "react-paginate";
 import { fetchDetailCategory } from "@/redux/actions/category";
+import { formatDate } from "@/lib/methods";
 
 const BlogList = () => {
   const dispatch = useDispatch();
@@ -74,7 +75,7 @@ const BlogList = () => {
                         <div className="post-meta">
                           <span>
                             <i className="far fa-calendar-alt" />
-                            <a href="#">{data.date}</a>
+                            <a href="#">{formatDate(data.date)}</a>
                           </span>
                         </div>
                         <h3 className="title">
@@ -185,7 +186,7 @@ const BlogList = () => {
                             </h5>
                             <span className="posted-on">
                               <i className="far fa-calendar-alt" />
-                              <a href="#">{data.date}</a>
+                              <a href="#">{formatDate(data.date)}</a>
                             </span>
                           </div>
                         </li>

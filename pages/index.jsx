@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchVideos } from "@/redux/actions/videos";
 import { fetchNews } from "@/redux/actions/news";
 import { useEffect } from "react";
+import { formatDate } from "@/lib/methods";
 
 const index = () => {
   const dispatch = useDispatch();
@@ -52,16 +53,16 @@ const index = () => {
                   <div className="col-xl-9">
                     {/*=== Hero Content ===*/}
                     <div className="hero-content text-white text-center">
-                      <span className="ribbon">Wisata &amp; Travels</span>
+                      <span className="ribbon">Wisata dan Travel</span>
                       <h1 data-animation="fadeInDown" data-delay=".4s">
-                        Visit Kampung Tematik Mulaharja
+                        Visit Wisata Tematik Mulyaharja
                       </h1>
                       <div
                         className="hero-button"
                         data-animation="fadeInRight"
                         data-delay=".6s"
                       >
-                        <Link legacyBehavior href="/about">
+                        <Link legacyBehavior href="/">
                           <a className="main-btn primary-btn">
                             Explore More
                             <i className="fas fa-paper-plane" />
@@ -86,39 +87,28 @@ const index = () => {
               {/*=== About Content Box ===*/}
               <div className="about-two_content-box mb-35 wow fadeInLeft">
                 <div className="section-title mb-30">
-                  <span className="sub-title">Tentang Kampung</span>
-                  <h2>Pesona asri & Edukatif desa mulyaharja</h2>
+                  <span className="sub-title">Tentang Wisata</span>
+                  <h2>Pesona asri dan Edukatif wisata Mulyaharja</h2>
                 </div>
                 <p>
-                  Deskripsi Kampung tematik mulyaharjaDeskripsi Kampung tematik
-                  mulyaharjaDeskripsi Kampung tematik mulyaharjaDeskripsi
-                  Kampung tematik mulyaharja
+                  Wisata Tematik Mulyaharja merupakan tempat wisata di Kota
+                  Bogor yang memiliki julukan surga yang tersisa di tengah kota.
+                  Tempat wisata di Kota Bogor ini merupakan salah satu destinasi
+                  wisata yang bertemakan alam asri dan pemandangan pedesaan
+                  adalah Agro Eduwisata Organik Mulyaharja atau Wisata Tematik
+                  Mulyaharja.
                 </p>
                 <div className="card-list">
-                  <div className="card-item">
-                    <i className="fas fa-badge-check" />
-                    Edukasi
-                  </div>
-                  <div className="card-item">
-                    <i className="fas fa-badge-check" />
-                    Wisata
-                  </div>
-                  <div className="card-item">
-                    <i className="fas fa-badge-check" />
-                    Kuliner
-                  </div>
-                  <div className="card-item">
-                    <i className="fas fa-badge-check" />
-                    Treking
-                  </div>
-                  <div className="card-item">
-                    <i className="fas fa-badge-check" />
-                    Spot Foto
-                  </div>
-                  <div className="card-item">
-                    <i className="fas fa-badge-check" />
-                    Agrowisata
-                  </div>
+                  {category.data &&
+                  category.data.data &&
+                  category.data.data.length > 0
+                    ? category.data.data.map((data) => (
+                        <div className="card-item">
+                          <i className="fas fa-badge-check" />
+                          {data.name}
+                        </div>
+                      ))
+                    : ""}
                 </div>
               </div>
             </div>
@@ -145,7 +135,7 @@ const index = () => {
               {/*=== Section Title ===*/}
               <div className="section-title text-center mb-45 wow fadeInDown">
                 <span className="sub-title">Kegiatan</span>
-                <h2>Explore Kampung Tematik</h2>
+                <h2>Explore Wisata Tematik</h2>
               </div>
             </div>
           </div>
@@ -190,8 +180,8 @@ const index = () => {
             <div className="col-xl-7">
               {/*=== Section Title ===*/}
               <div className="section-title text-center text-white mb-50 wow fadeInDown">
-                <span className="sub-title">Video Mulaharja</span>
-                <h2>Explore Setiap Video Mulaharja</h2>
+                <span className="sub-title">Video Mulyaharja</span>
+                <h2>Explore Setiap Video Mulyaharja</h2>
               </div>
             </div>
           </div>
@@ -204,7 +194,7 @@ const index = () => {
                   key={data.id}
                 >
                   <div className="section-title text-center text-white mb-50 wow fadeInDown">
-                    <h2>Mengenal Panen di Mulaharja</h2>
+                    <h2>{data.title}</h2>
                   </div>
                   <iframe
                     width="560"
@@ -236,9 +226,9 @@ const index = () => {
               <div className="blog-content-box mb-40 wow fadeInLeft">
                 {/*=== Section Title ===*/}
                 <div className="section-title mb-30">
-                  <span className="sub-title">Berita &amp; Kegiatan</span>
+                  <span className="sub-title">Berita dan Kegiatan</span>
                   <h2>
-                    Berita &amp; Blog untuk Setiap Pembaruan Artikel & Tips
+                    Berita dan Blog untuk Setiap Pembaruan Artikel dan Tips
                     Terbaru
                   </h2>
                 </div>
@@ -263,13 +253,21 @@ const index = () => {
                     key={data.id}
                   >
                     <div className="post-thumbnail">
-                      <img src={data.cover} alt="Blog Image" />
+                      <img
+                        src={data.cover}
+                        alt="Blog Image"
+                        style={{
+                          objectFit: "cover",
+                          width: "100%",
+                          height: "200px",
+                        }}
+                      />
                     </div>
                     <div className="entry-content">
                       <div className="post-meta">
                         <span>
                           <i className="far fa-calendar-alt" />
-                          <a href="#">{data.date}</a>
+                          <a href="#">{formatDate(data.date)}</a>
                         </span>
                         <h3 className="title">
                           <Link
@@ -326,7 +324,8 @@ const index = () => {
                       </div>
                       <p>{data.subtitle}</p>
                       <p className="text-cyan">
-                        <i className="far fa-calendar" /> {data.date}
+                        <i className="far fa-calendar" />{" "}
+                        {formatDate(data.date)}
                       </p>
                     </div>
                   </div>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useDispatch, useSelector } from "react-redux";
+import { formatDate } from "@/lib/methods";
 const Kegiatan = () => {
   const dispatch = useDispatch();
 
@@ -23,7 +24,7 @@ const Kegiatan = () => {
 
   return (
     <Layout header={2} extraClass={"pt-160"}>
-      <PageBanner pageTitle={"Kegiatan Mulaharja"} />
+      <PageBanner pageTitle={"Kegiatan Mulyaharja"} />
       {/*====== Start Places Section ======*/}
       <section className="places-section pb-100 pt-100">
         <div className="container">
@@ -60,7 +61,7 @@ const Kegiatan = () => {
                         </p>
                         <p className="price">
                           <i className="fas fa-calendar-alt" />
-                          {data.date}
+                          {formatDate(data.date)}
                         </p>
                         <div className="meta">
                           <span>

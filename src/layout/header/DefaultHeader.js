@@ -48,7 +48,7 @@ const DefaultHeader = () => {
                           <span className="title">Email Address</span>
                           <h5>
                             <a href="mailto:support@gmail.com">
-                              mulaharja@gmail.com
+                              Mulyaharja@gmail.com
                             </a>
                           </h5>
                         </div>

@@ -25,7 +25,7 @@ const Contact = () => {
               <div className="section-title text-center mb-45 wow fadeInDown">
                 <span className="sub-title">Kontak Kami</span>
                 <h2>
-                  Siap Berkunjung ke Kampung Mulaharja? Jangan Ragu untuk
+                  Siap Berkunjung ke Wisata Mulyaharja? Jangan Ragu untuk
                   Menghubungi Kami
                 </h2>
               </div>

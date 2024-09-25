@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { fetchDetailVideos, fetchVideos } from "@/redux/actions/videos";
+import { formatDate } from "@/lib/methods";
 
 const VideoDetail = () => {
   const dispatch = useDispatch();
@@ -66,14 +67,14 @@ const VideoDetail = () => {
                 <div
                   className="mb-4"
                   dangerouslySetInnerHTML={{
-                    __html: videos.details?.description,
+                    __html: videos.details.description,
                   }}
                 />
 
                 {/*===  Comments Form  ===*/}
                 <div className="comments-respond mb-30 wow fadeInUp">
                   <h3 className="comments-heading" style={{ marginBottom: 15 }}>
-                    Leave a Comments
+                    Tinggalkan Komentar
                   </h3>
                   <form
                     onSubmit={(e) => e.preventDefault()}
@@ -115,8 +116,11 @@ const VideoDetail = () => {
                       </div>
                       <div className="col-lg-12">
                         <div className="form_group">
-                          <button className="main-btn primary-btn">
-                            Send comments
+                          <button
+                            className="main-btn primary-btn"
+                            type="button"
+                          >
+                            Kirimkan komentar
                             <i className="fas fa-angle-double-right" />
                           </button>
                         </div>
@@ -135,7 +139,12 @@ const VideoDetail = () => {
                       <li>
                         <span>
                           <i className="far fa-calendar-alt" />
-                          Tanggal<span>{videos.details?.date}</span>
+                          Tanggal
+                          <span>
+                            {videos.details
+                              ? formatDate(videos.details.date)
+                              : ""}
+                          </span>
                         </span>
                       </li>
                       <li>

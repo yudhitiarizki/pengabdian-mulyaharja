@@ -13,11 +13,20 @@ const Header2 = () => {
             {/*====== Site Branding ======*/}
             <div className="site-branding">
               <Link legacyBehavior href="/">
-                <a className="brand-logo">
-                  <img src={details.logo} alt="Site Logo" height={50} />
+                <a className="brand-logo mr-10">
+                  <img src={details.logo} alt="Site Logo" height={38} />
                 </a>
               </Link>
+
+              <a href="#">
+                <img
+                  src="assets/images/logo/logo_sv.png"
+                  height={40}
+                  alt="Site Logo"
+                />
+              </a>
             </div>
+
             {/*====== Nav Menu ======*/}
             <div className="nav-menu">
               {/*====== Site Branding ======*/}

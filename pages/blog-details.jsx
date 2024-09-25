@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDetailNews, fetchRecentNews } from "@/redux/actions/news";
 import { useEffect } from "react";
+import { formatDate } from "@/lib/methods";
 
 const BlogDetails = () => {
   const dispatch = useDispatch();
@@ -347,7 +348,7 @@ const BlogDetails = () => {
                             </h5>
                             <span className="posted-on">
                               <i className="far fa-calendar-alt" />
-                              <a href="#">{data.date}</a>
+                              <a href="#">{formatDate(data.date)}</a>
                             </span>
                           </div>
                         </li>

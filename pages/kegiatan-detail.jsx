@@ -8,6 +8,8 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
+import { formatDate } from "@/lib/methods";
+
 const KegiatanDetail = () => {
   const dispatch = useDispatch();
 
@@ -115,7 +117,7 @@ const KegiatanDetail = () => {
                       </p>
                       <p className="price">
                         <i className="fas fa-calendar-alt" />
-                        {data.date}
+                        {formatDate(data.date)}
                       </p>
                       <div className="meta">
                         <span>
